@@ -21,12 +21,9 @@ w_bishop = pygame.image.load(os.path.join("img", "WBishop.png"))
 B = [b_bishop, b_king, b_knight, b_pawn, b_queen, b_rook]
 W = [w_bishop, w_king, w_knight, w_pawn, w_queen, w_rook]
 
-ROW = []
-COL = []
+ROW = [17.5 + 123.75*i for i in range(8)]
+COL = [17.5 + 123.75*i for i in range(8)]
 
-for i in range (8):
-    ROW.append(17.5 + 123.75*i)
-    COL.append(17.5 + 123.75*i)
 
 class Piece:
     img = -1

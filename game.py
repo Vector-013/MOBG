@@ -1,6 +1,6 @@
 import pygame
 import os
-from piece import *
+from board import Board
 
 board = pygame.image.load(os.path.join("img", "board.png"))
 
@@ -21,8 +21,9 @@ def redraw_gameWindow():
     global win
     win.blit(board, (0,0))
     
-    bishop = Bishop(3,6,"b")
-    bishop.draw(win)
+    play_board = Board(8, 8)
+    play_board.draw(win)
+    
     pygame.display.update()
     
     
