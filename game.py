@@ -20,11 +20,10 @@ win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Chess Game")
 
 
-def redraw_gameWindow():
+def redraw_gameWindow(play_board):
     global win
     win.blit(board, (0,0))
     
-    play_board = Board(8, 8)
     play_board.draw(win)
     
     pygame.display.update()
@@ -39,16 +38,17 @@ def click(pos):
     for i in range(8):
         for j in range(8):
             if x>=COL[i]-17.5 and x<=COL[i]+106.25 and y>=ROW[j]-17.5 and y<=ROW[j]+106.25:
-                print(i ,j)
                 return i, j   
     
 def main():
     
+    play_board = Board(8, 8)
     clock = pygame.time.Clock()
     run = True
+    
     while run:
         clock.tick(10)
-        redraw_gameWindow()
+        redraw_gameWindow(play_board)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -61,7 +61,10 @@ def main():
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                r,c = click(pos)
+                c,r = click(pos)
+                if play_board.board[r][c] != 0:
+                    play_board.select(r, c)
+                    
             
 
 

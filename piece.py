@@ -45,6 +45,10 @@ class Piece:
             toDraw = W[self.img]
         else:
             toDraw = B[self.img]
+            
+        if self.selected:
+            pygame.draw.rect(win, (255,0,0), (COL[self.col], ROW[self.row], 100,100), 5)
+        
         
         win.blit(toDraw, (COL[self.col], ROW[self.row]))
         
