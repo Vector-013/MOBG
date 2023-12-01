@@ -43,6 +43,7 @@ def click(pos):
 def main():
     
     play_board = Board(8, 8)
+    posMove = []
     clock = pygame.time.Clock()
     run = True
     
@@ -62,8 +63,11 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 c,r = click(pos)
-                if play_board.board[r][c] != 0:
-                    play_board.select(r, c)
+                play_board.select(r, c)
+                
+                         
+                                    
+                
                     
             
 

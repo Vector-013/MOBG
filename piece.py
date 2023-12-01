@@ -40,7 +40,11 @@ class Piece:
     def isSeleted(self):
         return self.selected
     
-    def draw(self, win):
+    def moveSet(self, board):
+        moves = []
+        return moves
+    
+    def draw(self, win, board):
         if self.color == "w":
             toDraw = W[self.img]
         else:
@@ -48,6 +52,12 @@ class Piece:
             
         if self.selected:
             pygame.draw.rect(win, (255,0,0), (COL[self.col], ROW[self.row], 100,100), 5)
+            
+            moves = self.moveSet(board)
+            
+            for t in moves :
+                pygame.draw.rect(win, (0,0,255), (COL[t[1]], ROW[t[0]], 100,100), 5)
+            
         
         
         win.blit(toDraw, (COL[self.col], ROW[self.row]))
@@ -65,6 +75,67 @@ class Knight(Piece):
 
 class Pawn(Piece):
     img = 3
+    def __init__(self, row, col, color):
+        super().__init__(row, col, color)
+        self.first = True
+        self.queen = False
+        
+    def moveSet(self, board):
+        i = self.row
+        j = self.col
+        
+        moves = []    # stores tuples of valid moves in (row, col)
+        
+        try:
+            if self.color == "b":
+                
+                if i < 7:
+                    
+                    if i < 6:
+                        p = board[i+1][j]
+                        if p == 0:
+                            moves.append((i + 1, j))
+                        
+                        if j < 7 and board[i + 1][j + 1] !=0 and  board[i + 1][j + 1].color != self.color:
+                            moves.append((i + 1, j + 1))
+                            
+                        if j > 0 and board[i + 1][j - 1] !=0 and board[i + 1][j - 1] != self.color:
+                            moves.append((i + 1, j - 1))
+                    
+                    
+                    if self.first:
+                        
+                        if i == 1:
+                            p2 = board[i+2][j]
+                            if p2 == 0 and board[i + 1][j] == 0 :
+                                moves.append((i + 2 ,j))
+                                
+                                
+            else:
+                if i > 0:
+                    p = board[i-1][j]
+                    if p == 0:
+                        moves.append((i - 1, j))
+                    
+                    if j < 7 and board[i - 1][j+1] !=0 and board[i - 1][j + 1].color != self.color: 
+                        moves.append((i - 1, j + 1))
+                        
+                    if j > 0 and board[i - 1][j - 1] !=0 and board[i - 1][j - 1].color != self.color:
+                        moves.append((i - 1, j - 1))
+                    
+                    if self.first:
+                        if i == 6:
+                            p2 = board[i - 2][j]
+                            if p2 == 0 and board[i - 1][j] == 0 :
+                                moves.append((i - 2 ,j))
+                        
+                            
+            
+        except :
+            print("[ERROR] : pawn moves ")
+        
+        return moves
+        
 
 class Queen(Piece):
     img = 4

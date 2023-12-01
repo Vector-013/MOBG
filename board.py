@@ -1,4 +1,9 @@
 from piece import *
+import pygame
+
+
+ROW = [17.5 + 123.75*i for i in range(8)]
+COL = [17.5 + 123.75*i for i in range(8)]
 
 class Board:
     def __init__(self, rows, cols):
@@ -9,7 +14,7 @@ class Board:
         
         
         
-        self.board[0][0] = Rook(0, 0,"b")
+        self.board[0][0] = Rook(0, 0,"b")    ## (row, col) format, flip while reffering as (x, y) on screen
         self.board[0][1] = Knight(0 ,1, "b")
         self.board[0][2] = Bishop(0 ,2, "b")
         self.board[0][3] = Queen(0 ,3, "b")
@@ -49,15 +54,29 @@ class Board:
         for i in range(self.rows):
             for j in range(self.cols):
                 if self.board[i][j] != 0:
-                    self.board[i][j].draw(win)
+                    self.board[i][j].draw(win, self.board)
                     
     def select(self, r, c):
         for i in range(self.rows):
             for j in range(self.cols):
                 if self.board[i][j] != 0:
                     self.board[i][j].selected = False
-                    
-        self.board[r][c].selected = True
+        if self.board[r][c] != 0:            
+            self.board[r][c].selected = True
+    
+    # def show_moves(self, win, r, c):
+    #     if self.board[r][c] != 0 and self.board[r][c].selected:
+            
+            
+    #         for t in self.board[r][c].moveSet(self.board) :
+    #             print(t[1])
+    #             try:
+    #                 pygame.draw.rect(win, (0,0,255), (COL[t[1]], ROW[t[0]], 100,100), 5)
+    #             except:
+    #                 print("popo")
+                
+             
+            
         
     
         
