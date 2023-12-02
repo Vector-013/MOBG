@@ -43,6 +43,7 @@ def click(pos):
 def main():
     
     play_board = Board(8, 8)
+    color = "w"
     posMove = []
     clock = pygame.time.Clock()
     run = True
@@ -68,9 +69,5 @@ def main():
                          
                                     
                 
-                    
             
-
-
-
 main()

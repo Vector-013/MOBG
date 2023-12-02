@@ -33,16 +33,24 @@ class Piece:
         self.col = col
         self.color = color
         self.selected = False
+        self.move_list = []
         
     def move(self):
         pass
     
+    def update_valid_moves(self, board):   ## re calculate valid moves of pieces
+        self.move_list = self.moveSet(board)  
+    
     def isSeleted(self):
         return self.selected
     
-    def moveSet(self, board):
+    def moveSet(self, board):   ## methods specific to each child class for calculation of valid moves
         moves = []
         return moves
+    
+    def change_pos(self, pos):  ## update row, col
+        self.row = pos[0]
+        self.col = pos[1]
     
     def draw(self, win, board):
         if self.color == "w":
@@ -66,12 +74,123 @@ class Piece:
     
 class Bishop(Piece):
     img = 0
+    
+    def moveSet(self, board):
+        i = self.row
+        j = self.col
+        
+        moves = []
+        
+        tr = j + 1 # for top right
+        
+        for q in range(i - 1, -1, -1):
+            if tr < 8:
+                if board[q][tr] == 0:
+                    moves.append((q, tr))
+                elif board[q][tr].color != self.color:
+                    moves.append((q, tr))
+                    break
+                else:
+                    break
+                
+            else:
+                break
+            
+            tr += 1
+            
+        tl = j - 1  # top left
+        
+        for w in range(i - 1, -1, -1):
+            if tl >= 0:
+                if board[w][tl] == 0:
+                    moves.append((w, tl))
+                elif board[w][tl].color != self.color:
+                    moves.append((w, tl))
+                    break
+                else:
+                    break
+                
+            else:
+                break
+            
+            tl -= 1
+        
+        bl = j - 1
+        
+        for w in range(i + 1, 8):
+            if bl < 8 and bl >= 0:
+                if board[w][bl] == 0:
+                    moves.append((w, bl))
+                elif board[w][bl].color != self.color:
+                    moves.append((w, bl))
+                    break
+                else:
+                    break
+            else:
+                break
+            bl -= 1
+            
+        br = j + 1
+        
+        for w in range(i + 1, 8):
+            if br < 8 and br >= 0:
+                if board[w][br] == 0:
+                    moves.append((w, br))
+                elif board[w][br].color != self.color:
+                    moves.append((w, br))
+                    break
+                else:
+                    break
+            else:
+                break
+            
+            br += 1    
+                
+        return moves    
 
 class King(Piece):
     img = 1
 
 class Knight(Piece):
     img = 2
+    def moveSet(self, board):
+        i = self.row
+        j = self.col
+        
+        moves = []
+        
+        try : 
+            if i > 1:
+                if j < 7 and (board[i - 2][j + 1] ==0 or (board[i - 2][j + 1] !=0  and  board[i - 2][j + 1].color != self.color)):
+                    moves.append((i - 2, j + 1))
+                    
+                if j > 0 and (board[i - 2][j - 1] == 0 or (board[i - 2][j - 1] != 0 and board[i - 2][j - 1].color != self.color )):
+                    moves.append((i - 2, j - 1)) 
+            
+            if i > 0:
+                if j < 6 and (board[i - 1][j + 2] ==0 or (board[i - 1][j + 2] !=0  and  board[i - 1][j + 2].color != self.color)):
+                    moves.append((i - 1, j + 2))
+                
+                if j > 1 and (board[i - 1][j - 2] ==0 or (board[i - 1][j - 2] !=0  and  board[i - 1][j - 2].color != self.color)):
+                    moves.append((i - 1, j - 2))
+                    
+            if i < 6:
+                if j < 7 and (board[i + 2][j + 1] ==0 or (board[i + 2][j + 1] !=0  and  board[i + 2][j + 1].color != self.color)):
+                    moves.append((i + 2, j + 1))
+                    
+                if j > 0 and (board[i + 2][j - 1] == 0 or (board[i + 2][j - 1] != 0 and board[i + 2][j - 1].color != self.color )):
+                    moves.append((i + 2, j - 1))
+            
+            if i < 7:
+                if j < 6 and (board[i + 1][j + 2] ==0 or (board[i + 1][j + 2] !=0  and  board[i + 1][j + 2].color != self.color)):
+                    moves.append((i + 1, j + 2))
+                
+                if j > 1 and (board[i + 1][j - 2] ==0 or (board[i + 1][j - 2] !=0  and  board[i + 1][j - 2].color != self.color)):
+                    moves.append((i + 1, j - 2))      
+                
+        except:
+            print("[ERROR] Knight moves")
+        return moves
 
 class Pawn(Piece):
     img = 3
@@ -142,5 +261,47 @@ class Queen(Piece):
 
 class Rook(Piece):
     img = 5
+    def moveSet(self, board):
+        i = self.row
+        j = self.col
+        
+        moves = []
+        
+        for k in range(j + 1, 8):
+            if board[i][k] == 0:
+                moves.append((i, k))
+            elif board[i][k].color != self.color:
+                moves.append((i, k))
+                break
+            else:
+                break
+            
+        for k in range(j - 1, -1, -1):
+            if board[i][k] == 0:
+                moves.append((i, k))
+            elif board[i][k].color != self.color:
+                moves.append((i, k))
+                break
+            else:
+                break
+        
+        for k in range(i - 1, -1, -1):
+            if board[k][j] == 0:
+                moves.append((k, j))
+            elif board[k][j].color != self.color:
+                moves.append((k, j))
+                break
+            else:
+                break
+            
+        for k in range(i + 1, 8):
+            if board[k][j] == 0:
+                moves.append((k, j))
+            elif board[k][j].color != self.color:
+                moves.append((k, j))
+                break
+            else:
+                break    
       
+        return moves
     
